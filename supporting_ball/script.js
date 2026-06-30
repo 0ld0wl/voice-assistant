@@ -25,25 +25,35 @@ const ball = document.getElementById('ball');
 const message = document.getElementById('message');
 
 let isShaking = false;
+let lastPhrase = "";
 
 ball.addEventListener('click', () => {
-    if (isShaking) return;
+    console.log("Ball clicked");
+    if (isShaking) {
+        console.log("Already shaking, ignoring click");
+        return;
+    }
 
     isShaking = true;
-    message.classList.add('fade-out');
+    message.style.opacity = '0';
     ball.classList.add('shake');
 
     setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        message.innerText = phrases[randomIndex];
+        let newPhrase;
+        do {
+            newPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        } while (newPhrase === lastPhrase);
+
+        lastPhrase = newPhrase;
+        message.innerText = newPhrase;
+        console.log("New phrase:", newPhrase);
 
         ball.classList.remove('shake');
-        message.classList.remove('fade-out');
-        message.classList.add('fade-in');
+        message.style.opacity = '1';
 
         setTimeout(() => {
-            message.classList.remove('fade-in');
             isShaking = false;
+            console.log("Ready for next click");
         }, 500);
     }, 1000);
 });
